@@ -32,3 +32,5 @@ build/
 
 
 lastfmAPIkey.PNG
+
+__pycache__
