@@ -2,6 +2,7 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 import sys
 from Request import Request
+from UrlBuilder import UrlBuilder
 
 # Variables
 objApi = Request()
@@ -38,21 +39,20 @@ def case_2():
     strPrompt = "Input Artist Name >"
     strArtist = session.prompt(strPrompt)
 
-    completer = WordCompleter(["run", "redo", "add", "exit"])
+    completer = WordCompleter(["run", "exit"])
     strPrompt = ">>>"
     strInput = session.prompt(strPrompt,completer = completer)
 
     if(strInput == "exit"):
+        print("Goodbye")
         sys.exit(1)
     elif(strInput == "run"):
-        # run request query for album info
-        pass
-    elif(strInput == "add"):
-        # add another album to search for
-        pass
-    elif(strInput == "redo"):
-        # redo last query, most likely because of typo from user.
-        pass
+        print("building Query...")
+        tempObj = UrlBuilder()
+        strQuery = tempObj.getUrlAlbum(strAlbum, strArtist)
+        print("Query: " + strQuery)
+
+
 
 # User chooses to input artist, return list of possible albums to choose from
 def case_3():
@@ -63,7 +63,7 @@ def case_4():
     pass
 
 
-# Switch logic. This method determines which case to enter into
+# Switch logic. Determines which case to enter into
 def switch():
     global strPath
 
