@@ -27,8 +27,6 @@ class Request():
             print("Error.")
             print(e)
 
-
-
     # Post album info to MongoDB
     def postAlbumInfo(self, url):
 
@@ -40,3 +38,18 @@ class Request():
 
 
 
+    # Retrieve list of albums from specified Artist
+    def getAlbumList(self, url):
+        tempList = []
+
+        try:
+            response = requests.get(url).json()
+
+            for x in response["topalbums"]["album"]:
+                tempList.append(x["name"])
+
+        except requests.exceptions.RequestException as e:
+            print("Error.")
+            print(e)
+
+        return tempList

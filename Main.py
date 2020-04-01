@@ -69,7 +69,47 @@ def case_2():
 
 # User chooses to input artist, return list of possible albums to choose from
 def case_3():
-    pass
+    print("inside case 3")
+    global strArtist
+    completer = WordCompleter(["run", "exit", "artist="])
+    strPrompt = ">>>"
+    lstInput = session.prompt(strPrompt, completer = completer).split()
+
+    if(lstInput[0] == "exit"):
+        print("Goodbye.")
+        sys.exit(1)
+    elif(lstInput[0] == "artist="):
+        s = " "
+        strArtist = s.join(lstInput[1:])
+    elif(lstInput[0] == "run"):
+        urlObj = UrlBuilder()
+        reqObj = Request()
+
+        url = urlObj.getUrlArtist(strArtist)
+        lstAlbums = reqObj.getAlbumList(url)
+
+        completer = WordCompleter (lstAlbums)
+        strPrompt = "Choose Album ('finish' to exit) >>> "
+        boolFinish = False
+        albumChoices = []
+        while(boolFinish == False):
+            strAlbum = session.prompt(strPrompt, completer = completer)
+
+            if(strAlbum =="finish"):
+                boolFinish = True
+            else:
+                albumChoices.append(strAlbum)
+                lstAlbums.remove(strAlbum)
+
+        lstUrls = []
+        for x in albumChoices:
+            tempUrl = urlObj.getUrlAlbum(x, strArtist)
+            lstUrls.append(tempUrl)
+
+        print(lstUrls)
+
+
+
 
 # User chooses to input a text file, read line by line album and artist name
 def case_4():
