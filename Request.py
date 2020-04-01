@@ -1,7 +1,7 @@
 # Perform all API requests
 # Parses album info and posts to MOngoDB database
-
 import requests
+from Album import Album
 
 
 class Request():
@@ -11,15 +11,32 @@ class Request():
     # Retrieve album info with lastFM api
     def getAblumInfo(self, url):
         try:
-            url = url
-            headers = {}
+            response = requests.get(url).json()
 
-            response = requests.get(url, header = headers)
-            return response.json()
+            albumObj = Album()
+            albumObj.setAlbumName(response["album"]["name"])
+            albumObj.setArtistName(response["album"]["artist"])
+            albumObj.setPublishDate(response["album"]["wiki"]["published"])
+            for x in response["album"]["image"]:
+                if(x["size"] == "large"):
+                    albumObj.setImageUrl(x["#text"])
+                    break
+
+            return albumObj
         except requests.exceptions.RequestException as e:
             print("Error.")
             print(e)
 
+
+
     # Post album info to MongoDB
     def postAlbumInfo(self, url):
-        pass
+
+        try:
+            requests.post(url)
+        except requests.exceptions.RequestException as e:
+            print("Error.")
+            print(e)
+
+
+

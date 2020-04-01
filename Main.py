@@ -1,5 +1,6 @@
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
+from Album import Album
 import sys
 from Request import Request
 from UrlBuilder import UrlBuilder
@@ -10,6 +11,8 @@ session = PromptSession()
 
 lstPath = ["album", "artist", "list", "exit"]
 strPath = ""
+strAlbum = ""
+strArtist = ""
 
 # Get user input for path
 def case_1():
@@ -17,7 +20,7 @@ def case_1():
 
     global lstPath
     global strPath
-    strPrompt = "Choose Path>"
+    strPrompt = "Choose Path >"
 
     completer = WordCompleter(lstPath)
     strInput = session.prompt(strPrompt, completer = completer)
@@ -33,24 +36,34 @@ def case_1():
 def case_2():
     print("inside case 2")
 
-    strPrompt = "Input Album Name >"
-    strAlbum = session.prompt(strPrompt)
-
-    strPrompt = "Input Artist Name >"
-    strArtist = session.prompt(strPrompt)
-
-    completer = WordCompleter(["run", "exit"])
+    global strAlbum
+    global strArtist
+    completer = WordCompleter(["run", "exit", "album=", "artist="])
     strPrompt = ">>>"
-    strInput = session.prompt(strPrompt,completer = completer)
+    lstInput = session.prompt(strPrompt,completer = completer).split()
 
-    if(strInput == "exit"):
+    if(lstInput[0] == "exit"):
         print("Goodbye")
         sys.exit(1)
-    elif(strInput == "run"):
+    elif(lstInput[0] == "album="):
+        print("inside: album=")
+        s = " "
+        strAlbum = s.join(lstInput[1:])
+    elif(lstInput[0] == "artist="):
+        s = " "
+        strArtist = s.join(lstInput[1:])
+    elif(lstInput[0] == "run"):
         print("building Query...")
-        tempObj = UrlBuilder()
-        strQuery = tempObj.getUrlAlbum(strAlbum, strArtist)
+        urlObj = UrlBuilder()
+        reqObj = Request()
+
+        strQuery = urlObj.getUrlAlbum(strAlbum, strArtist)
         print("Query: " + strQuery)
+
+        albumObj = reqObj.getAblumInfo(strQuery)
+        postUrl = urlObj.postUrlCreate(albumObj)
+
+        reqObj.postAlbumInfo(postUrl)
 
 
 
@@ -58,7 +71,7 @@ def case_2():
 def case_3():
     pass
 
-
+# User chooses to input a text file, read line by line album and artist name
 def case_4():
     pass
 

@@ -4,8 +4,8 @@ class Album():
     def __init__(self):
         self.albumName = ""
         self.artistName = ""
-        self.publishYear = ""
-        self.lstTracks = []
+        self.publishDate = ""
+        self.imageUrl = ""
 
 
 
@@ -21,14 +21,24 @@ class Album():
     def setArtistName(self, artistName):
         self.artistName = artistName
 
-    def getPublishYear(self):
-        return self.publishYear
+    def getPublishDate(self):
+        return self.publishDate
 
-    def setPublishYear(self, publishYear):
-        self.publishYear = publishYear
+    def setPublishDate(self, publishDate):
+        self.publishDate = publishDate
 
-    def getLstTracks(self):
-        return self.lstTracks
+    def getImageUrl(self):
+        return self.imageUrl
 
-    def setLstTracks(self, lstTracks):
-        self.lstTracks = lstTracks
+    def setImageUrl(self, imageUrl):
+        self.imageUrl = imageUrl
+
+
+    def toString(self):
+        str = ""
+        str = str + "Album: " + self.albumName + "\n"
+        str = str + "Artist: " + self.artistName + "\n"
+        str = str + "Publish Date: " + self.publishDate + "\n"
+        str = str + "Image URL: " + self.imageUrl + "\n"
+
+        return str
