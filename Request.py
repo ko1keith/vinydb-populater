@@ -38,6 +38,7 @@ class Request():
 
 
 
+
     # Retrieve list of albums from specified Artist
     def getAlbumList(self, url):
         tempList = []

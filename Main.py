@@ -103,10 +103,14 @@ def case_3():
 
         lstUrls = []
         for x in albumChoices:
-            tempUrl = urlObj.getUrlAlbum(x, strArtist)
-            lstUrls.append(tempUrl)
+            tempUrl = urlObj.getUrlAlbum(x, strArtist) # create LastFM api call
+            albumObj = reqObj.getAblumInfo(tempUrl)    # make LastFM api call
+            postUrl = urlObj.postUrlCreate(albumObj)   # create MongoDB api call
+            reqObj.postAlbumInfo(postUrl)              # make MongoDB api Call
+            print(x + " By " + strArtist + " posted to MongoDB.")
 
-        print(lstUrls)
+
+
 
 
 
