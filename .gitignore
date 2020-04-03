@@ -34,3 +34,4 @@ build/
 lastfmAPIkey.PNG
 
 __pycache__
+/test.py

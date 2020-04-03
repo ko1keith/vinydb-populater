@@ -10,6 +10,7 @@ class Request():
 
     # Retrieve album info with lastFM api
     def getAblumInfo(self, url):
+
         try:
             response = requests.get(url).json()
 
@@ -36,9 +37,6 @@ class Request():
             print("Error.")
             print(e)
 
-
-
-
     # Retrieve list of albums from specified Artist
     def getAlbumList(self, url):
         tempList = []
@@ -54,3 +52,17 @@ class Request():
             print(e)
 
         return tempList
+
+    def checkAlbumAdded(self, albumName, artistName):
+        f = open("albumHistory.txt")
+        for line in f:
+            album = line.strip("\n").split("BY")
+
+            print(albumName)
+            print(album[0])
+            print(artistName)
+            print(album[1])
+            if(albumName == album[0] and artistName == album[1]):
+                return True
+
+        return False

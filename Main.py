@@ -9,7 +9,6 @@ from UrlBuilder import UrlBuilder
 objApi = Request()
 session = PromptSession()
 
-lstPath = ["album", "artist", "list", "exit"]
 strPath = ""
 strAlbum = ""
 strArtist = ""
@@ -18,7 +17,7 @@ strArtist = ""
 def case_1():
     print("inside case 1")
 
-    global lstPath
+    lstPath = ["album", "artist", "list", "exit"]
     global strPath
     strPrompt = "Choose Path >"
 
@@ -32,7 +31,7 @@ def case_1():
         sys.exit(1)
 
 
-# User chooses to input single album
+# Input a single album, input album title, and artist name
 def case_2():
     print("inside case 2")
 
@@ -56,6 +55,11 @@ def case_2():
         print("building Query...")
         urlObj = UrlBuilder()
         reqObj = Request()
+
+        boolResponse = reqObj.checkAlbumAdded(strAlbum, strArtist)
+        if(boolResponse == True):
+            print("Error: Album already added.")
+            sys.exit(1)
 
         strQuery = urlObj.getUrlAlbum(strAlbum, strArtist)
         print("Query: " + strQuery)
@@ -103,21 +107,41 @@ def case_3():
 
         lstUrls = []
         for x in albumChoices:
+
+            boolResponse = reqObj.checkAlbumAdded(x, strArtist)
+            if(boolResponse == True):
+                print("Error: " + x + " already exists in database")
+                continue
             tempUrl = urlObj.getUrlAlbum(x, strArtist) # create LastFM api call
-            albumObj = reqObj.getAblumInfo(tempUrl)    # make LastFM api call
+            albumObj = reqObj.getAblumInfo(tempUrl)    # perform LastFM api call
             postUrl = urlObj.postUrlCreate(albumObj)   # create MongoDB api call
-            reqObj.postAlbumInfo(postUrl)              # make MongoDB api Call
+            reqObj.postAlbumInfo(postUrl)              # perform MongoDB api Call
             print(x + " By " + strArtist + " posted to MongoDB.")
-
-
-
-
-
 
 
 # User chooses to input a text file, read line by line album and artist name
 def case_4():
-    pass
+    global strPath
+
+    f = open("ListOfAlbums.txt")
+    for line in f:
+        lineSplit = line.strip("\n").split("BY")
+
+        urlObj = UrlBuilder()
+        reqObj = Request()
+
+        boolResponse = reqObj.checkAlbumAdded(lineSplit[0], lineSplit[1])
+        if (boolResponse == True):
+            print("Error: " + lineSplit[0] + " already exists in database")
+            continue
+
+        strQuery = urlObj.getUrlAlbum(lineSplit[0], lineSplit[1]) # create LstFM api call
+        albumObj = reqObj.getAblumInfo(strQuery)                  # perform LastFM api call
+        postUrl = urlObj.postUrlCreate(albumObj)                  # create MongoDB api call
+        reqObj.postAlbumInfo(postUrl)                             # perform MongoDB api call
+        print(lineSplit[0] + " By " + lineSplit[1] + " posted to MongoDB.")
+
+    strPath = ""
 
 
 # Switch logic. Determines which case to enter into
@@ -132,6 +156,8 @@ def switch():
         return switcher.get(3)()
     elif(strPath == "list"):
         return switcher.get(4)()
+    elif(strPath == "exit"):
+        sys.exit(1)
 
 
 # Dictionary outlining the possible cases to switch to
