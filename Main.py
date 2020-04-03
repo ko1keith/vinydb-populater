@@ -15,8 +15,6 @@ strArtist = ""
 
 # Get user input for path
 def case_1():
-    print("inside case 1")
-
     lstPath = ["album", "artist", "list", "exit"]
     global strPath
     strPrompt = "Choose Path >"
@@ -33,8 +31,6 @@ def case_1():
 
 # Input a single album, input album title, and artist name
 def case_2():
-    print("inside case 2")
-
     global strAlbum
     global strArtist
     completer = WordCompleter(["run", "exit", "album=", "artist="])
@@ -73,7 +69,6 @@ def case_2():
 
 # User chooses to input artist, return list of possible albums to choose from
 def case_3():
-    print("inside case 3")
     global strArtist
     completer = WordCompleter(["run", "exit", "artist="])
     strPrompt = ">>>"
