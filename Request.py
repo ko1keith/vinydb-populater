@@ -17,7 +17,11 @@ class Request():
             albumObj = Album()
             albumObj.setAlbumName(response["album"]["name"])
             albumObj.setArtistName(response["album"]["artist"])
-            albumObj.setPublishDate(response["album"]["wiki"]["published"])
+            if "wiki" in response["album"]:
+                albumObj.setPublishDate(response["album"]["wiki"]["published"])
+            elif "tags" in response["album"]:
+                albumObj.setPublishDate(response["album"]["tags"]["tag"][0]["name"])
+
             for x in response["album"]["image"]:
                 if(x["size"] == "large"):
                     albumObj.setImageUrl(x["#text"])
@@ -58,10 +62,6 @@ class Request():
         for line in f:
             album = line.strip("\n").split("BY")
 
-            print(albumName)
-            print(album[0])
-            print(artistName)
-            print(album[1])
             if(albumName == album[0] and artistName == album[1]):
                 return True
 

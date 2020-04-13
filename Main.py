@@ -41,7 +41,7 @@ def case_2():
         print("Goodbye")
         sys.exit(1)
     elif(lstInput[0] == "album="):
-        print("inside: album=")
+
         s = " "
         strAlbum = s.join(lstInput[1:])
     elif(lstInput[0] == "artist="):
